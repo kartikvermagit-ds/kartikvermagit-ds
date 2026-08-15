@@ -55,10 +55,7 @@ def render_heatmap_svg(json_path="data/contributions.json", output_path="contrib
     svg.append('    .dot-red { fill: #ff5f56; }')
     svg.append('    .dot-yellow { fill: #ffbd2e; }')
     svg.append('    .dot-green { fill: #27c93f; }')
-    
-    # Diagonal wipe animation keyframes
-    svg.append('    .day-box { opacity: 0; transform: scale(0.6) translateY(-4px); animation: dropIn 0.35s ease-out forwards; transform-origin: center; rx: 2.5px; }')
-    svg.append('    @keyframes dropIn { to { opacity: 1; transform: scale(1) translateY(0); } }')
+    svg.append('    .day-box { rx: 2.5px; }')
     svg.append('  </style>')
 
     # Outer container
@@ -89,7 +86,7 @@ def render_heatmap_svg(json_path="data/contributions.json", output_path="contrib
                 x_pos = start_x + w_idx * (box_size + box_gap)
                 svg.append(f'  <text x="{x_pos}" y="{start_y - 8}" class="label-text">{month_names[dt.month - 1]}</text>')
 
-    # Render Heatmap Cells with Staggered Diagonal Animation
+    # Render Heatmap Cells
     for w_idx, week in enumerate(weeks):
         x_pos = start_x + w_idx * (box_size + box_gap)
         for d_idx, d in enumerate(week):
@@ -100,10 +97,7 @@ def render_heatmap_svg(json_path="data/contributions.json", output_path="contrib
             level = min(d.get("level", 0), 5)
             color = PALETTE[level]
 
-            # Diagonal delay offset: column index + row index
-            delay = round(0.1 + (w_idx + row_idx) * 0.015, 3)
-
-            svg.append(f'  <rect x="{round(x_pos,1)}" y="{round(y_pos,1)}" width="{box_size}" height="{box_size}" fill="{color}" class="day-box" style="animation-delay: {delay}s;">')
+            svg.append(f'  <rect x="{round(x_pos,1)}" y="{round(y_pos,1)}" width="{box_size}" height="{box_size}" fill="{color}" class="day-box">')
             svg.append(f'    <title>{d["count"]} contributions on {d["date"]}</title>')
             svg.append('  </rect>')
 

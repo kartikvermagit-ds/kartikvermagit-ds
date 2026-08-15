@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 import cv2
 import numpy as np
 from PIL import Image
@@ -10,41 +10,34 @@ def prep_photo(image_path="source-photo.jpg", output_path="source-prepped.png"):
         sys.exit(1)
 
     print(f"Loading {image_path}...")
-    img = Image.open(image_path).convert("RGBA")
+    img = Image.open(image_path).convert("RGB")
+    
+    # Resize to manageable high-def dimensions while keeping aspect ratio
+    img.thumbnail((800, 1000), Image.Resampling.LANCZOS)
+    img_np = np.array(img)
 
-    # Try background removal with rembg, fallback if rembg model download is slow or unavailable
-    try:
-        from rembg import remove
-        print("Removing background with rembg...")
-        nobg = remove(img)
-    except Exception as e:
-        print(f"rembg notice ({e}), proceeding with original image mask...")
-        nobg = img
-
-    # Convert PIL Image to OpenCV numpy array
-    nobg_np = np.array(nobg)
-
-    # Extract RGB and Alpha
-    if nobg_np.shape[2] == 4:
-        r, g, b, a = cv2.split(nobg_np)
-        alpha = a / 255.0
-    else:
-        r, g, b = cv2.split(nobg_np)
-        alpha = np.ones(r.shape, dtype=float)
-
-    bgr = cv2.merge([b, g, r])
+    # Convert to BGR for OpenCV
+    bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 
-    # Apply CLAHE for high local contrast
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    enhanced_gray = clahe.apply(gray)
+    # 1. Clean background: background in original photo is plain off-white (brightness > 215)
+    # Map all background pixels to pure 255 (white)
+    mask_bg = gray > 215
+    
+    # 2. Apply CLAHE on subject for balanced midtones and facial expression detail
+    clahe = cv2.createCLAHE(clipLimit=2.2, tileGridSize=(8, 8))
+    enhanced = clahe.apply(gray)
 
-    # Composite enhanced subject onto pure white background (255)
-    white_bg = np.ones_like(enhanced_gray) * 255
-    composite = (enhanced_gray * alpha + white_bg * (1.0 - alpha)).astype(np.uint8)
+    # 3. Gamma correction to make facial details (eyes, smile, hair) crisp
+    gamma = 1.15
+    inv_gamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
+    enhanced = cv2.LUT(enhanced, table)
 
-    # Save prepped image
-    cv2.imwrite(output_path, composite)
+    # Apply pure white background
+    enhanced[mask_bg] = 255
+
+    cv2.imwrite(output_path, enhanced)
     print(f"Prepped photo saved to {output_path}")
 
 if __name__ == "__main__":

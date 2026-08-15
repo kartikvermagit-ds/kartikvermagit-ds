@@ -28,8 +28,6 @@ def make_info_card(output_path="info-card.svg"):
     svg.append('    .term-text { font-family: "Fira Code", Consolas, "Courier New", monospace; font-size: 12.5px; font-weight: 500; }')
     svg.append('    .label { fill: #8b949e; font-weight: 600; }')
     svg.append('    .prompt { fill: #3fb950; font-weight: 700; }')
-    svg.append('    .row { opacity: 0; transform: translateY(8px); animation: fadeIn 0.4s ease-out forwards; }')
-    svg.append('    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }')
     svg.append('  </style>')
 
     # Card background
@@ -55,10 +53,8 @@ def make_info_card(output_path="info-card.svg"):
     y_start = 26
     row_height = 43
     for i, (key, value, val_color) in enumerate(card_data):
-        delay = round(0.2 + i * 0.12, 2)
         y = y_start + i * row_height
-        
-        svg.append(f'    <g class="row" style="animation-delay: {delay}s;">')
+        svg.append('    <g>')
         # Label block
         svg.append(f'      <text x="0" y="{y}" class="label">{key.ljust(11)}:</text>')
         # Value block

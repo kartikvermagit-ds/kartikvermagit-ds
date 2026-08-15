@@ -9,8 +9,6 @@
     .term-text { font-family: "Fira Code", Consolas, "Courier New", monospace; font-size: 12.5px; font-weight: 500; }
     .label { fill: #8b949e; font-weight: 600; }
     .prompt { fill: #3fb950; font-weight: 700; }
-    .row { opacity: 0; transform: translateY(8px); animation: fadeIn 0.4s ease-out forwards; }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
   </style>
   <rect width="490" height="472" class="bg"/>
   <path d="M 0 8 Q 0 0 8 0 L 482 0 Q 490 0 490 8 L 490 36 L 0 36 Z" class="title-bar"/>
@@ -22,39 +20,39 @@
   <g class="term-text" transform="translate(20, 58)">
     <text x="0" y="0" class="prompt">kartik@developer-laptop</text>
     <text x="180" y="0" fill="#484f58">-----------------------</text>
-    <g class="row" style="animation-delay: 0.2s;">
+    <g>
       <text x="0" y="26" class="label">USER       :</text>
       <text x="105" y="26" fill="#58a6ff">kartikvermagit-ds (Kartik Verma)</text>
     </g>
-    <g class="row" style="animation-delay: 0.32s;">
+    <g>
       <text x="0" y="69" class="label">ROLE       :</text>
       <text x="105" y="69" fill="#79c0ff">B.Tech CSE (Data Science) Student</text>
     </g>
-    <g class="row" style="animation-delay: 0.44s;">
+    <g>
       <text x="0" y="112" class="label">LOCATION   :</text>
       <text x="105" y="112" fill="#a5d6ff">Kanpur, UP, India 🇮🇳</text>
     </g>
-    <g class="row" style="animation-delay: 0.56s;">
+    <g>
       <text x="0" y="155" class="label">EMAIL      :</text>
       <text x="105" y="155" fill="#7ee787">kv5612872@gmail.com</text>
     </g>
-    <g class="row" style="animation-delay: 0.68s;">
+    <g>
       <text x="0" y="198" class="label">NOW        :</text>
       <text x="105" y="198" fill="#56d364">B.Tech CS-DS | Web Dev & Open Source</text>
     </g>
-    <g class="row" style="animation-delay: 0.8s;">
+    <g>
       <text x="0" y="241" class="label">PREV       :</text>
       <text x="105" y="241" fill="#e3b341">C Programming & Data Structures Basics</text>
     </g>
-    <g class="row" style="animation-delay: 0.92s;">
+    <g>
       <text x="0" y="284" class="label">STACK      :</text>
       <text x="105" y="284" fill="#bc8cff">Python, C, JavaScript, TypeScript, HTML, CSS,...</text>
     </g>
-    <g class="row" style="animation-delay: 1.04s;">
+    <g>
       <text x="0" y="327" class="label">HIGHLIGHTS :</text>
       <text x="105" y="327" fill="#ff7b72">23 Public Repos | Problem Solver (PSA)</text>
     </g>
-    <g class="row" style="animation-delay: 1.16s;">
+    <g>
       <text x="0" y="370" class="label">SOCIALS    :</text>
       <text x="105" y="370" fill="#ffa657">LinkedIn: in/kartik-verma-ds | IG: kv561287</text>
     </g>
