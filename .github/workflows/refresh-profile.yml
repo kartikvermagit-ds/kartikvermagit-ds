@@ -1,0 +1,45 @@
+name: Refresh profile insights
+
+on:
+  schedule:
+    - cron: "18 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the profile repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install profile-script dependencies
+        run: pip install requests==2.32.3 beautifulsoup4==4.12.3
+
+      - name: Refresh contribution data and visuals
+        run: |
+          python scripts/fetch_contributions.py
+          python scripts/render_heatmap_svg.py
+          python scripts/make_info_card.py
+
+      - name: Commit refreshed profile assets
+        run: |
+          if git diff --quiet; then
+            echo "Profile assets are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/contributions.json contrib-heatmap.svg info-card.svg
+          git commit -m "chore: refresh profile insights"
+          git push
+
+
